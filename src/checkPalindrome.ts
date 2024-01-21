@@ -1,16 +1,22 @@
 import * as os from "os";
-import { Salutation } from "./salutation";
+import { LanguageInterface } from "./language.interface";
 
-export class checkPalindrome {
-    public static isPalindrome(message: string): string {
+export class CheckPalindrome {
+    private readonly _language: LanguageInterface;
+
+    constructor(language: LanguageInterface) {
+        this._language = language;
+    }
+
+    public isPalindrome(message: string): string {
         let reverseMessage = message.toLocaleLowerCase().split('').reverse().join('');
 
-        let result = Salutation.BONJOUR + os.EOL + reverseMessage + os.EOL;
+        let result = this._language.Greeting() + os.EOL + reverseMessage + os.EOL;
 
         if(reverseMessage == message){
-            result += Salutation.BIEN_DIT + os.EOL;
+            result += this._language.Congratulate() + os.EOL;
         }
 
-        return result + Salutation.AU_REVOIR;
+        return result + this._language.Bye();
     }
 }

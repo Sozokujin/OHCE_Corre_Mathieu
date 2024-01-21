@@ -1,35 +1,108 @@
 import * as os from "os";
-import {checkPalindrome} from "../src/checkPalindrome";
 import {Salutation} from "../src/salutation";
+import {LanguageFrench} from "../src/languageFrench";
+import {VerifyPalindromeBuilder} from "./utilities/verifyPalindromeBuilder";
+import {LanguageEnglish} from "../src/languageEnglish";
+import {LanguageInterface} from "../src/language.interface";
 
 const palindrome = 'kayak';
 const notPalindromes = ['test', 'gilet']
 
 describe("Vérifier si le message est un palindrome", () => {
-   test.each([...notPalindromes])("QUAND on saisit un non-palindrome ALORS elle est renvoyée en miroir",
-       (message : string) => {
-          let result = checkPalindrome.isPalindrome(message);
-          let resultPalindrome = message.split('').reverse().join('');
-          expect(result).toContain(resultPalindrome);
-   });
+    test.each([...notPalindromes])(
+        "QUAND on saisit un non-palindrome %s " +
+        "ALORS elle est renvoyée en miroir",
+        (message: string) => {
+            let result = VerifyPalindromeBuilder.Default().isPalindrome(message);
 
-   test("QUAND on saisit un palindrome ALORS celui-ci est renvoyé ET 'Bien dit' est envoyé", () =>{
-      let result = checkPalindrome.isPalindrome(palindrome);
-      expect(result).toContain(palindrome + os.EOL + Salutation.BIEN_DIT);
-   });
+            let resultPalindrome = message.split('').reverse().join('');
+            expect(result).toContain(resultPalindrome);
+        });
 
-   test.each([...notPalindromes, palindrome])('QUAND on saisit une message ALORS "Bonjour" est envoyé avant toute réponse',
-    (message: string) => {
-       let result = checkPalindrome.isPalindrome(message);
-       let firstLine = result.split(os.EOL)[0];
-       expect(firstLine).toEqual(Salutation.BONJOUR)
-   });
+    test.each([
+        [new LanguageFrench(), Salutation.BIEN_DIT],
+        [new LanguageEnglish(), Salutation.WELL_SAID],
+    ])("ETANT DONNE un utilisateur parlant la %s " +
+        "QUAND on saisit un palindrome " +
+        "ALORS celui-ci est renvoyé " +
+        "ET '%s' est envoyé ensuite",
+        (langue: LanguageInterface, resultPalindrome: string) => {
+            let checker = new VerifyPalindromeBuilder()
+                .withLanguage(langue)
+                .Build();
 
-    test.each([...notPalindromes, palindrome])('QUAND on saisit une message ALORS "Au revoir" est envoyé en dernier.',
-    (message: string) => {
-       let result = checkPalindrome.isPalindrome(message);
-       let lines = result.split(os.EOL);
-       let lastLine = lines[lines.length - 1];
-       expect(lastLine).toEqual(Salutation.AU_REVOIR)
-   });
+            let result = checker.isPalindrome(palindrome);
+
+            expect(result).toContain(palindrome + os.EOL + resultPalindrome);
+        });
+
+    test.each([...notPalindromes, palindrome])(
+        'ETANT DONNE un utilisateur parlant français ' +
+        'QUAND on saisit une message %s ' +
+        'ALORS "Bonjour" est envoyé avant toute réponse',
+        (message: string) => {
+            const langue = new LanguageFrench();
+            let checker =
+                new VerifyPalindromeBuilder()
+                    .withLanguage(langue)
+                    .Build();
+
+            let result = checker.isPalindrome(message);
+
+            let firstLine = result.split(os.EOL)[0];
+            expect(firstLine).toEqual(Salutation.BONJOUR)
+        });
+
+    test.each([...notPalindromes, palindrome])(
+        'ETANT DONNE un utilisateur parlant anglais ' +
+        'QUAND on saisit une message %s ' +
+        'ALORS "Hello" est envoyé avant toute réponse',
+        (message: string) => {
+            const langue = new LanguageEnglish();
+            let checker =
+                new VerifyPalindromeBuilder()
+                    .withLanguage(langue)
+                    .Build();
+
+            let result = checker.isPalindrome(message);
+
+            let firstLine = result.split(os.EOL)[0];
+            expect(firstLine).toEqual(Salutation.HELLO)
+        });
+
+    test.each([...notPalindromes, palindrome])(
+        'ETANT DONNE un utilisateur parlant français ' +
+        'QUAND on saisit une message %s ' +
+        'ALORS "Au revoir" est envoyé en dernier.',
+        (message: string) => {
+            const langue = new LanguageFrench();
+            let checker =
+                new VerifyPalindromeBuilder()
+                    .withLanguage(langue)
+                    .Build();
+
+            let result = checker.isPalindrome(message);
+
+            let lines = result.split(os.EOL);
+            let lastLine = lines[lines.length - 1];
+            expect(lastLine).toEqual(Salutation.AU_REVOIR)
+        });
+
+    test.each([...notPalindromes, palindrome])(
+        'ETANT DONNE un utilisateur parlant anglais ' +
+        'QUAND on saisit une message %s ' +
+        'ALORS "Goodbye" est envoyé en dernier.',
+        (message: string) => {
+            const langue = new LanguageEnglish();
+            let checker =
+                new VerifyPalindromeBuilder()
+                    .withLanguage(langue)
+                    .Build();
+
+            let result = checker.isPalindrome(message);
+
+            let lines = result.split(os.EOL);
+            let lastLine = lines[lines.length - 1];
+        expect(lastLine).toEqual(Salutation.GOODBYE)
+        });
 });
