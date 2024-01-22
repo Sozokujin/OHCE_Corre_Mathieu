@@ -1,11 +1,11 @@
 import * as os from "os";
-import { Salutation } from "../src/salutation";
-import { LanguageFrench } from "../src/languageFrench";
+import { Salutation } from "../src/domain/salutation";
+import { LanguageFrench } from "../src/domain/languageFrench";
 import { VerifyPalindromeBuilder } from "./utilities/verifyPalindromeBuilder";
-import { LanguageEnglish } from "../src/languageEnglish";
-import { LanguageInterface } from "../src/language.interface";
+import { LanguageEnglish } from "../src/domain/languageEnglish";
+import { LanguageInterface } from "../src/domain/language.interface";
 import { LanguageFake } from "./utilities/languageFake";
-import { TimeOfDay } from "../src/timeOfDay";
+import { TimeOfDay } from "../src/domain/timeOfDay";
 
 const palindrome = "kayak";
 const notPalindromes = ["test", "gilet"];

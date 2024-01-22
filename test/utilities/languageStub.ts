@@ -1,4 +1,4 @@
-import { LanguageInterface } from "../../src/language.interface";
+import { LanguageInterface } from "../../src/domain/language.interface";
 
 export class LanguageStub implements LanguageInterface {
   Congratulate(): string {
