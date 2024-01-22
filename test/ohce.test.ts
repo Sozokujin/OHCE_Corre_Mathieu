@@ -6,6 +6,7 @@ import { LanguageEnglish } from "../src/domain/languageEnglish";
 import { LanguageInterface } from "../src/domain/language.interface";
 import { LanguageFake } from "./utilities/languageFake";
 import { TimeOfDay } from "../src/domain/timeOfDay";
+import "./utilities/matchers/matchers";
 
 const palindrome = "kayak";
 const notPalindromes = ["test", "gilet"];
@@ -73,7 +74,6 @@ describe("Vérifier si le message est un palindrome", () => {
 
       let firstLine = result.split(os.EOL)[0];
       let expectedValue = languageFake.Greeting(timeOfDay);
-      // @ts-ignore
       expect(firstLine).toHaveFirstLine(expectedValue);
     }
   );
@@ -90,7 +90,6 @@ describe("Vérifier si le message est un palindrome", () => {
 
       let lines = result.split(os.EOL);
       let lastLine = lines[lines.length - 1];
-      // @ts-ignore
       expect(lastLine).toHaveLastLine(Salutation.AU_REVOIR);
     }
   );
@@ -107,7 +106,6 @@ describe("Vérifier si le message est un palindrome", () => {
 
       let lines = result.split(os.EOL);
       let lastLine = lines[lines.length - 1];
-      // @ts-ignore
       expect(lastLine).toHaveLastLine(Salutation.GOODBYE);
     }
   );
